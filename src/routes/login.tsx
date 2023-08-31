@@ -1,9 +1,18 @@
-import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Link, redirect } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { UserAuthForm } from "@/components/user-auth-form";
 import loginImage from "@/assets/login-image2.jpg";
 import { useState } from "react";
+
+const loggedIn = true;
+
+export const loader = () => {
+  if (loggedIn) {
+    return redirect("/");
+  } else {
+    return {};
+  }
+};
 
 export default function AuthenticationPage() {
   const [showLogin, setShowLogin] = useState<boolean>(false);

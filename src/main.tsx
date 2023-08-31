@@ -5,9 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root, { rootLoader } from "./routes/root";
 import ErrorPage from "./routes/error-page";
-import AuthenticationPage from "./routes/login";
-
-
+import AuthenticationPage, { loader as authLoader } from "./routes/login";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +18,7 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <AuthenticationPage />,
+    loader: authLoader,
   },
 ]);
 
