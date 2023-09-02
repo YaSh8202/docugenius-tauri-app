@@ -5,6 +5,8 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {  useLocation } from "react-router-dom";
+import { getGoogleUrl } from "@/utils/getGoogleUrl";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   login: boolean;
@@ -16,6 +18,11 @@ export function UserAuthForm({
   ...props
 }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  // const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = ((location.state as any)?.from?.pathname as string) || '/';
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -105,17 +112,20 @@ export function UserAuthForm({
           Github
         </Button>
         <Button
+          asChild
           variant="outline"
           type="button"
           disabled={isLoading}
           className="flex-1"
         >
-          {isLoading ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Icons.google className="mr-2 h-4 w-4" />
-          )}{" "}
-          Google
+          <a href={getGoogleUrl(from)}>
+            {isLoading ? (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Icons.google className="mr-2 h-4 w-4" />
+            )}{" "}
+            Google
+          </a>
         </Button>
       </div>
     </div>

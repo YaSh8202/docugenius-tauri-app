@@ -1,7 +1,7 @@
 import Navbar from "@/components/navbar";
 import { Outlet, redirect } from "react-router-dom";
 
-const loggedIn = true;
+const loggedIn = false;
 
 export const rootLoader = ()=>{
   if(loggedIn){

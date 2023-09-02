@@ -4,7 +4,7 @@ import { UserAuthForm } from "@/components/user-auth-form";
 import loginImage from "@/assets/login-image2.jpg";
 import { useState } from "react";
 
-const loggedIn = true;
+const loggedIn = false;
 
 export const loader = () => {
   if (loggedIn) {
@@ -19,23 +19,8 @@ export default function AuthenticationPage() {
 
   return (
     <div className="h-screen">
-      <div className="md:hidden">
-        <img
-          src={loginImage}
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="block dark:hidden h-full"
-        />
-        <img
-          src={loginImage}
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="hidden dark:block h-full "
-        />
-      </div>
-      <div className="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+
+      <div className="container relative  h-full flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Button
           variant={"ghost"}
           className={"absolute right-4 top-4 md:right-8 md:top-8"}
