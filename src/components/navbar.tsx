@@ -1,23 +1,23 @@
 import { ModeToggle } from "./mode-toggle";
-import { invoke } from "@tauri-apps/api/tauri";
 import { UploadDocModal } from "./upload-doc-modal";
-
+import useAuthStore from "@/store/authStore";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 function Navbar() {
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    const data = await invoke("greet", { name: "Zoro" });
-    console.log(data);
-  }
+  const user = useAuthStore((state) => state.user);
 
   return (
     <div className="border-b">
-      <div className="flex h-16 items-center px-4 container mx-auto">
+      <div className="flex h-16 items-center px-4  mx-auto">
         <h1 className="text-2xl font-bold">DocuGenius</h1>
         <div className="ml-auto flex items-center space-x-4">
           <UploadDocModal />
           <ModeToggle />
+          <Avatar>
+            <AvatarImage src={user?.photo} alt="@shadcn" />
+            <AvatarFallback>{user?.name}</AvatarFallback>
+          </Avatar>
         </div>
       </div>
     </div>

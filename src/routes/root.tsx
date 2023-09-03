@@ -1,21 +1,12 @@
 import Navbar from "@/components/navbar";
-import { Outlet, redirect } from "react-router-dom";
-
-const loggedIn = false;
-
-export const rootLoader = ()=>{
-  if(loggedIn){
-    return {
-      name: "test user",
-      email: "user@test.com"
-    }
-  }else{
-    return redirect("/login");
-  }
-}
+import useAuthStore from "@/store/authStore";
+import { Outlet, redirect, useLoaderData } from "react-router-dom";
 
 const Root = () => {
-  
+  const user = useAuthStore((state) => state.user);
+
+  console.log("user", user);
+
   return (
     <div className="flex flex-col h-screen">
       <Navbar />

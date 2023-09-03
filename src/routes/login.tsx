@@ -3,19 +3,25 @@ import { Button } from "@/components/ui/button";
 import { UserAuthForm } from "@/components/user-auth-form";
 import loginImage from "@/assets/login-image2.jpg";
 import { useState } from "react";
+import useAuthStore from "@/store/authStore";
 
-const loggedIn = false;
+// const loggedIn = false;
 
-export const loader = () => {
-  if (loggedIn) {
-    return redirect("/");
-  } else {
-    return {};
-  }
-};
+// export const loader = () => {
+//   if (loggedIn) {
+//     return redirect("/");
+//   } else {
+//     return {};
+//   }
+// };
 
 export default function AuthenticationPage() {
   const [showLogin, setShowLogin] = useState<boolean>(false);
+  const user = useAuthStore((state) => state.user);
+  console.log("user", user)
+  if (user) {
+    redirect("/");
+  }
 
   return (
     <div className="h-screen">

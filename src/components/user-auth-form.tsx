@@ -5,8 +5,9 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {  useLocation } from "react-router-dom";
-import { getGoogleUrl } from "@/utils/getGoogleUrl";
+import { redirect, useLocation } from "react-router-dom";
+import { getGoogleUrl } from "@/lib/getGoogleUrl";
+import api from "@/lib/api";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   login: boolean;
@@ -18,25 +19,58 @@ export function UserAuthForm({
   ...props
 }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [confirmPassword, setConfirmPassword] = React.useState<string>("");
+  const [name, setName] = React.useState<string>("");
 
   // const navigate = useNavigate();
   const location = useLocation();
 
-  const from = ((location.state as any)?.from?.pathname as string) || '/';
+  const from = ((location.state as any)?.from?.pathname as string) || "/";
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    if (login) {
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
+      console.log("res", res);
+      redirect(from)
+    } else {
+      const data = await api.post("/auth/register", {
+        name,
+        passwordConfirm: confirmPassword,
+        email,
+        password,
+      });
+      console.log("data", data);
+    }
+    setIsLoading(false);
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
+          { !login && <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="name">
+              Name
+            </Label>
+            <Input
+              id="name"
+              placeholder="Full Name"
+              type="text"
+              autoCapitalize="none"
+              autoCorrect="off"
+              disabled={isLoading}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>}
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
               Email
@@ -49,6 +83,8 @@ export function UserAuthForm({
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="grid gap-1">
@@ -62,6 +98,8 @@ export function UserAuthForm({
               autoCapitalize="none"
               autoCorrect="off"
               disabled={isLoading}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           {!login && (
@@ -76,10 +114,12 @@ export function UserAuthForm({
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
           )}
-          <Button disabled={isLoading}>
+          <Button type="submit" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
