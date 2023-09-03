@@ -7,21 +7,23 @@ import useAuthStore from "@/store/authStore";
 
 // const loggedIn = false;
 
-// export const loader = () => {
-//   if (loggedIn) {
-//     return redirect("/");
-//   } else {
-//     return {};
-//   }
-// };
+export const loader = () => {
+  const user = useAuthStore.getState().user;
+  console.log("user", user)
+  if (user) {
+    return redirect("/");
+  } else {
+    return {};
+  }
+};
 
 export default function AuthenticationPage() {
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const user = useAuthStore((state) => state.user);
   console.log("user", user)
-  if (user) {
-    redirect("/");
-  }
+  // if (user) {
+  //   redirect("/");
+  // }
 
   return (
     <div className="h-screen">

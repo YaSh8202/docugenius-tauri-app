@@ -13,7 +13,7 @@ const AuthMiddleware: React.FC<IAuthMiddleware> = ({ children }) => {
   const [cookies] = useCookies(["logged_in"]);
   const setUser = useAuthStore((state) => state.setUser);
 
-  const { isLoading } = useQuery({
+  const { isInitialLoading: isLoading } = useQuery({
     queryKey: ["users", "me"],
     queryFn: () => api.get("/users/me"),
     onSuccess: (data) => {
@@ -35,7 +35,7 @@ const AuthMiddleware: React.FC<IAuthMiddleware> = ({ children }) => {
     refetchInterval: 1000 * 60 * 5, // 5 minutes
   });
 
-  if (isLoading || isLoading2) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
