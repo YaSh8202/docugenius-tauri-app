@@ -15,6 +15,8 @@ import { uploadToCloudinary } from "@/lib/utils";
 import { Icons } from "./icons";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { useMutation } from "@tanstack/react-query";
+import { createNewDoc } from "@/lib/api";
 
 const baseStyle = {
   flex: 1,
@@ -60,6 +62,13 @@ export function UploadDocModal() {
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+
+  const newDocMutation = useMutation(createNewDoc, {
+    onSuccess: (data) => {
+      console.log("new doc data", data);
+    },
+  });
 
   const style = useMemo(
     () =>
@@ -78,11 +87,19 @@ export function UploadDocModal() {
     setIsLoading(true);
     const url = await uploadToCloudinary(file);
     setUploadedFile(url);
+
+    await newDocMutation.mutateAsync({
+      title,
+      url,
+    });
+
     setIsLoading(false);
+    setTitle("");
+    setOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="default">
           <PlusIcon className="h-4 w-4 mr-1" />
@@ -97,14 +114,14 @@ export function UploadDocModal() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4">
-        <div className="grid gap-1">
+          <div className="grid gap-1">
             <Label className="sr-only" htmlFor="title">
               Doc Title
             </Label>
             <Input
               id="title"
               placeholder="Doc Title"
-              type="password"
+              type="text"
               autoCapitalize="none"
               autoCorrect="off"
               disabled={isLoading}
@@ -125,7 +142,8 @@ export function UploadDocModal() {
                 </>
               ) : (
                 <p>
-                  {acceptedFiles[0].name} - {(acceptedFiles[0].size/1000000).toFixed(2)} MB
+                  {acceptedFiles[0].name} -{" "}
+                  {(acceptedFiles[0].size / 1000000).toFixed(2)} MB
                 </p>
               )}
             </div>
@@ -136,7 +154,7 @@ export function UploadDocModal() {
             {isLoading ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              <p>Upload</p>
+              <p>Submit</p>
             )}
           </Button>
         </DialogFooter>

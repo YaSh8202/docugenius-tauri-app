@@ -16,7 +16,11 @@ function Navbar() {
           <ModeToggle />
           <Avatar>
             <AvatarImage src={user?.photo} alt="@shadcn" />
-            <AvatarFallback>{user?.name}</AvatarFallback>
+            <AvatarFallback>
+              {
+                user?.name.toUpperCase()[0]+`${user?.name.split(" ")[1] ? user?.name.split(" ")[1].toUpperCase()[0] : ""}`
+              }
+              </AvatarFallback>
           </Avatar>
         </div>
       </div>

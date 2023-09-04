@@ -1,33 +1,36 @@
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { UserAuthForm } from "@/components/user-auth-form";
 import loginImage from "@/assets/login-image2.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuthStore from "@/store/authStore";
 
 // const loggedIn = false;
 
-export const loader = () => {
-  const user = useAuthStore.getState().user;
-  console.log("user", user)
-  if (user) {
-    return redirect("/");
-  } else {
-    return {};
-  }
-};
+// export const loader = () => {
+//   const user = useAuthStore.getState().user;
+//   console.log("user", user)
+//   if (user) {
+//     return redirect("/");
+//   } else {
+//     return {};
+//   }
+// };
 
 export default function AuthenticationPage() {
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const user = useAuthStore((state) => state.user);
-  console.log("user", user)
-  // if (user) {
-  //   redirect("/");
-  // }
+  const navigate = useNavigate();
+  console.log("user", user);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <div className="h-screen">
-
       <div className="container relative  h-full flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Button
           variant={"ghost"}

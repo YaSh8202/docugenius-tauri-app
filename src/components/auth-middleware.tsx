@@ -1,39 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { useQuery } from "@tanstack/react-query";
 import useAuthStore from "@/store/authStore";
-import api from "@/lib/api";
-import { User } from "@/types";
+import { getLoggedInUser, refreshToken } from "@/lib/api";
 
 type IAuthMiddleware = {
   children: React.ReactElement;
 };
 
+const startingRequest = async () => {
+  await refreshToken();
+  return await getLoggedInUser();
+};
+
 const AuthMiddleware: React.FC<IAuthMiddleware> = ({ children }) => {
   const [cookies] = useCookies(["logged_in"]);
   const setUser = useAuthStore((state) => state.setUser);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
-  const { isInitialLoading: isLoading } = useQuery({
-    queryKey: ["users", "me"],
-    queryFn: () => api.get("/users/me"),
-    onSuccess: (data) => {
-      console.log("data success", data);
-      setUser(data.data.data.user as User);
-    },
-    enabled: !!cookies.logged_in,
-    refetchInterval: 1000 * 60 * 5, // 5 minutes
-  });
 
-  const { isInitialLoading: isLoading2 } = useQuery({
-    queryKey: ["auth", "refresh"],
-    queryFn: () => {
-      return api.get("/auth/refresh");
-    },
-    onSuccess: (data) => {
-      console.log("data refresh", data);
-    },
-    refetchInterval: 1000 * 60 * 5, // 5 minutes
-  });
+  useEffect(() => {
+    if (!cookies.logged_in) {
+      setIsLoading(true);
+      startingRequest()
+        .then((user) => {
+          console.log("user", user);
+          setUser(user);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;

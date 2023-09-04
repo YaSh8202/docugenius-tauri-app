@@ -1,15 +1,15 @@
 import Navbar from "@/components/navbar";
 import useAuthStore from "@/store/authStore";
-import { Outlet, redirect, useLoaderData } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-export const rootLoader = () => {
-  const user = useAuthStore.getState().user;
+// export const rootLoader = () => {
+//   const user = useAuthStore.getState().user;
 
-  if (!user) {
-    return redirect("/login");
-  }
-  return user;
-};
+//   if (!user) {
+//     return redirect("/login");
+//   }
+//   return user;
+// };
 
 const Root = () => {
   const user = useAuthStore((state) => state.user);
