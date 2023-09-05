@@ -9,6 +9,31 @@ const api = axios.create({
   withCredentials: true,
 });
 
+export const refreshToken = async () => {
+  const res = await api.get("/auth/refresh");
+
+  if (res.status != 200) return null;
+
+  return res.data.user as User;
+};
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async function (error) {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      await refreshToken();
+
+      return api(originalRequest);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;
 
 export const getLoggedInUser = async () => {
@@ -18,14 +43,6 @@ export const getLoggedInUser = async () => {
   console.log("res", res);
 
   return res.data.data.user as User;
-};
-
-export const refreshToken = async () => {
-  const res = await api.get("/auth/refresh");
-
-  if (res.status != 200) return null;
-
-  return res.data.user as User;
 };
 
 export const createNewDoc = async ({

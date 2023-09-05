@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AuthMiddleware from "./components/auth-middleware";
 import { CookiesProvider } from "react-cookie";
 import DocPage from "./routes/Document";
+import DocumentsPage, { docsLoader } from "./routes/main";
 
 
 const queryClient = new QueryClient();
@@ -20,9 +21,15 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [{
-      path: "/documents",
+      path: "/docs/:id",
       element: <DocPage />,
-    }],
+    },
+    {
+      path: '/',
+      element: <DocumentsPage />,
+      loader: docsLoader,
+    }
+  ],
     // loader: rootLoader,
   },
   {
