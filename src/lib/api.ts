@@ -10,11 +10,15 @@ const api = axios.create({
 });
 
 export const refreshToken = async () => {
-  const res = await api.get("/auth/refresh");
+  try {
+    const res = await api.get("/auth/refresh");
 
-  if (res.status != 200) return null;
+    if (res.status != 200) return null;
 
-  return res.data.user as User;
+    return res.data.user as User;
+  } catch (e) {
+    console.log("error", e);
+  }
 };
 
 api.interceptors.response.use(
@@ -23,10 +27,14 @@ api.interceptors.response.use(
   },
   async function (error) {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      await refreshToken();
+      try {
+        await refreshToken();
+      } catch (e) {
+        return Promise.reject(e);
+      }
 
       return api(originalRequest);
     }
@@ -37,12 +45,17 @@ api.interceptors.response.use(
 export default api;
 
 export const getLoggedInUser = async () => {
-  const res = await api.get("/users/me");
+  try {
+    const res = await api.get("/users/me");
 
-  // if (res.status != 200) return null;
-  console.log("res", res);
+    // if (res.status != 200) return null;
+    console.log("res", res);
 
-  return res.data.data.user as User;
+    return res.data.data.user as User;
+  } catch (e) {
+    console.log("error", e);
+    return null;
+  }
 };
 
 export const createNewDoc = async ({
@@ -61,6 +74,26 @@ export const createNewDoc = async ({
     if (res.status != 201) return null;
 
     return res.data.data.doc;
+  } catch (e) {
+    console.log("error", e);
+  }
+};
+
+export const sendQuestion = async ({
+  docId,
+  question,
+}: {
+  docId: string;
+  question: string;
+}) => {
+  try {
+    const res = await api.post(`/docs/${docId}/questions`, {
+      question,
+    });
+
+    if (res.status != 201) return null;
+
+    return res.data.data.question;
   } catch (e) {
     console.log("error", e);
   }

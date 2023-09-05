@@ -20,7 +20,7 @@ function Navbar() {
           <UploadDocModal />
           
           <ModeToggle />
-          <Avatar>
+          <Avatar >
             <AvatarImage src={user?.photo} alt="@shadcn" />
             <AvatarFallback>
               {

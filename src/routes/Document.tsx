@@ -1,26 +1,54 @@
 import DocChat from "@/components/DocChat";
-import { Resizable } from 'react-resizable';
+import { Doc } from "@/types";
+import { useEffect, useRef } from "react";
+import { useLoaderData } from "react-router-dom";
+import SplitPane from "react-split-pane";
 
+// export const loader = async({params})=>{
 
+// }
 
 export default function DocPage() {
+  const { doc } = useLoaderData() as {doc: Doc};
+  const pdfRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    if (!pdfRef.current) return;
+
+    pdfRef.current.setAttribute("src", doc.url);
+  }, [doc]);
+
+  console.log(doc);
+
   return (
-    <main className="grid grid-cols-4 flex-1 h-[calc(100vh-68px)] overflow-hidden ">
-      <div className="col-span-2   bg-gray-700 overflow-hidden ">
-        <iframe
-          id="pdf-js-viewer"
-          src="https://res.cloudinary.com/dpuscktmu/image/upload/v1693843614/desdzsgox3uo4bhjifbi.pdf"
-          title="webviewer"
-          frameBorder="0"
-          scrolling="no"
-          width="100%"
-          height="100%"
-          className="scrollbar-hide overflow-hidden"
-        ></iframe>
-      </div>
-      <div className="col-span-2 max-h-full overflow-hidden">
-        <DocChat />
-      </div>
+    <main className=" flex-1 h-[calc(100vh-68px)] overflow-hidden ">
+      <SplitPane
+        split="vertical"
+        minSize={50}
+        defaultSize={parseInt(
+          window.localStorage.getItem("splitPos") || "400",
+          10
+        )}
+        onChange={(size) => localStorage.setItem("splitPos", size.toString())}
+      >
+        <div className="bg-gray-700 overflow-hidden h-[calc(100vh-68px)] ">
+          <iframe
+            id="pdf-js-viewer"
+            src={doc.url}
+            title="webviewer"
+            ref={pdfRef}
+            frameBorder="0"
+            scrolling="no"
+            width="100%"
+            height="100%"
+            className="scrollbar-hide overflow-hidden"
+          ></iframe>
+        </div>
+        <div className=" overflow-hidden h-[calc(100vh-68px)]">
+          <DocChat doc={doc} />
+          {/* <div className=" bg-green-100 h-full"></div> */}
+        </div>
+      </SplitPane>
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import Navbar from "@/components/navbar";
 import useAuthStore from "@/store/authStore";
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
 // export const rootLoader = () => {
 //   const user = useAuthStore.getState().user;
@@ -13,6 +14,11 @@ import { Outlet } from "react-router-dom";
 
 const Root = () => {
   const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user]);
 
   console.log("user", user);
 

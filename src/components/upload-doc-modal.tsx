@@ -17,6 +17,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { createNewDoc } from "@/lib/api";
+import { queryClient } from "@/main";
 
 const baseStyle = {
   flex: 1,
@@ -67,6 +68,7 @@ export function UploadDocModal() {
   const newDocMutation = useMutation(createNewDoc, {
     onSuccess: (data) => {
       console.log("new doc data", data);
+      queryClient.invalidateQueries(["docs"]);
     },
   });
 
