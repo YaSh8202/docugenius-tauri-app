@@ -47,10 +47,6 @@ export default api;
 export const getLoggedInUser = async () => {
   try {
     const res = await api.get("/users/me");
-
-    // if (res.status != 200) return null;
-    console.log("res", res);
-
     return res.data.data.user as User;
   } catch (e) {
     console.log("error", e);

@@ -21,7 +21,6 @@ export default function AuthenticationPage() {
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
-  console.log("user", user);
 
   useEffect(() => {
     if (user) {

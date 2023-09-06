@@ -46,7 +46,6 @@ const DocChat = ({ doc }: { doc: Doc }) => {
       onSuccess: (data) => {
         setMessage("");
         console.log("data", data);
-        // setMessages((prev) => [...prev, data]);
         addMessage(doc.id, data);
       },
     }
@@ -58,7 +57,6 @@ const DocChat = ({ doc }: { doc: Doc }) => {
       content: message,
       role: "user",
     } as Message);
-    console.log(message);
     sendQuesMutate(message);
   };
 

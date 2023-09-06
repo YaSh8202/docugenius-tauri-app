@@ -56,18 +56,16 @@ export function UploadDocModal() {
     isDragReject,
     acceptedFiles,
   } = useDropzone({
-    // accept: { "application/pdf": [".pdf"] },
+    accept: { "application/pdf": [".pdf"] },
     maxFiles: 1,
     maxSize: 10000000, // 10MB
   });
-  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
   const newDocMutation = useMutation(createNewDoc, {
-    onSuccess: (data) => {
-      console.log("new doc data", data);
+    onSuccess: () => {
       queryClient.invalidateQueries(["docs"]);
     },
   });
@@ -88,7 +86,6 @@ export function UploadDocModal() {
 
     setIsLoading(true);
     const url = await uploadToCloudinary(file);
-    setUploadedFile(url);
 
     await newDocMutation.mutateAsync({
       title,

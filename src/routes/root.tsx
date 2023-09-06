@@ -20,7 +20,6 @@ const Root = () => {
     if (!user) navigate("/login");
   }, [user]);
 
-  console.log("user", user);
 
   return (
     <div className="flex flex-col h-screen">
