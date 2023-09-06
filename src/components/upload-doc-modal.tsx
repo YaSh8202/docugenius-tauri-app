@@ -56,7 +56,7 @@ export function UploadDocModal() {
     isDragReject,
     acceptedFiles,
   } = useDropzone({
-    accept: { "application/pdf": [".pdf"] },
+    // accept: { "application/pdf": [".pdf"] },
     maxFiles: 1,
     maxSize: 10000000, // 10MB
   });
@@ -152,7 +152,7 @@ export function UploadDocModal() {
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={submitHandler} type="submit">
+          <Button disabled={isLoading} onClick={submitHandler} type="submit">
             {isLoading ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (
