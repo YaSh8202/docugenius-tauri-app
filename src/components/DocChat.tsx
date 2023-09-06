@@ -3,16 +3,21 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { DogIcon, Send, UserIcon } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import { Doc } from "@/types";
+import { Doc, Message } from "@/types";
+import api from "@/lib/api";
+import { Icons } from "./icons";
+import useMessageStore from "@/store/messageStore";
+import ReactMarkdown from 'react-markdown'
 
-const Message = ({ message, isUser }: { message: string; isUser: boolean }) => {
+
+const MessageComponent = ({ message, isUser }: { message: string; isUser: boolean }) => {
   return (
     <div
       className={`border-b border-border flex w-full ${
         isUser ? "" : "bg-secondary/70"
       } `}
     >
-      <div className="flex items-center mx-auto w-full max-w-xl py-6 gap-4">
+      <div className="flex items-start mx-auto w-full max-w-2xl py-6 gap-4">
         <div>
           {isUser ? (
             <UserIcon className="h-4 w-4 mr-1" />
@@ -20,7 +25,7 @@ const Message = ({ message, isUser }: { message: string; isUser: boolean }) => {
             <DogIcon className="h-4 w-4 mr-1" />
           )}
         </div>
-        <div className="flex-1">{message}</div>
+        <ReactMarkdown className="flex-1 overflow-scroll scrollbar-hide ">{message}</ReactMarkdown>
       </div>
     </div>
   );
@@ -29,26 +34,44 @@ const Message = ({ message, isUser }: { message: string; isUser: boolean }) => {
 const DocChat = ({ doc }: { doc: Doc }) => {
   const [message, setMessage] = React.useState("");
 
-  // const sendQuestionMutation = useMutation();
+  const messages = useMessageStore((state) => state.docs[doc.id]);
+  const addMessage = useMessageStore((state) => state.addMessage);
+
+  const { mutate: sendQuesMutate, isLoading } = useMutation(
+    async (ques: string) => {
+      const res = await api.post(`/docs/${doc.id}/query`, { query: ques });
+      return res.data?.data.queryResult;
+    },
+    {
+      onSuccess: (data) => {
+        setMessage("");
+        console.log("data", data);
+        // setMessages((prev) => [...prev, data]);
+        addMessage(doc.id, data);
+      },
+    }
+  );
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    addMessage(doc.id, {
+      content: message,
+      role: "user",
+    } as Message);
     console.log(message);
+    sendQuesMutate(message);
   };
 
   return (
     <div className="w-full h-full bg-background flex flex-col ">
       <div className="flex-1 overflow-auto scrollbar-hide ">
-        <Message message="Hello" isUser={true} />
-        <Message message="Hello" isUser={false} />
-        <Message message="Hello" isUser={true} />
-        <Message message="Hello" isUser={false} />
-        <Message message="Hello" isUser={true} />
-        <Message message="Hello" isUser={false} />
-        <Message message="Hello" isUser={true} />
-        <Message message="Hello" isUser={false} />
-        <Message message="Hello" isUser={true} />
-        <Message message="Hello" isUser={false} />
+        {messages?.map((msg, idx) => (
+          <MessageComponent
+            key={idx}
+            message={msg.content}
+            isUser={msg.role === "user"}
+          />
+        ))}
       </div>
       <form
         onSubmit={submitHandler}
@@ -59,9 +82,19 @@ const DocChat = ({ doc }: { doc: Doc }) => {
           onChange={(e) => setMessage(e.currentTarget.value)}
           placeholder="Enter your Question"
           className="flex-1"
+          disabled={isLoading}
         />
-        <Button type="submit" variant="ghost" className="ml-4">
-          <Send size={16} />
+        <Button
+          disabled={isLoading}
+          type="submit"
+          variant="ghost"
+          className="ml-4"
+        >
+          {isLoading ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Send size={16} />
+          )}
         </Button>
       </form>
     </div>

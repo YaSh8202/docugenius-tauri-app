@@ -12,3 +12,9 @@ export type Doc = {
   title: string;
   url: string;
 };
+
+export type Message = {
+  id: string;
+  content: string;
+  role: "user" | "assistant";
+};

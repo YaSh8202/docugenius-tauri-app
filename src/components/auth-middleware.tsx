@@ -7,28 +7,21 @@ type IAuthMiddleware = {
   children: React.ReactElement;
 };
 
-
-
 const AuthMiddleware: React.FC<IAuthMiddleware> = ({ children }) => {
   const [cookies] = useCookies(["logged_in"]);
   const setUser = useAuthStore((state) => state.setUser);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
-
   useEffect(() => {
-    if (cookies.logged_in) {
-      setIsLoading(true);
-      getLoggedInUser()
-        .then((user) => {
-          console.log("user", user);
-          setUser(user);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    getLoggedInUser()
+      .then((user) => {
+        console.log("user", user);
+        setUser(user);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   if (isLoading) {
