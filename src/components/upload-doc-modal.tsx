@@ -85,7 +85,7 @@ export function UploadDocModal() {
     const file = acceptedFiles[0];
 
     setIsLoading(true);
-    const url = await uploadToCloudinary(file);
+    const url = await uploadToCloudinary(file, title);
 
     await newDocMutation.mutateAsync({
       title,

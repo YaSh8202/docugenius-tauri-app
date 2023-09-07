@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { redirect, useLocation } from "react-router-dom";
 import { getGoogleUrl } from "@/lib/getGoogleUrl";
 import api from "@/lib/api";
+import { getGitHubUrl } from "@/lib/getGithubUrl";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   login: boolean;
@@ -39,7 +40,7 @@ export function UserAuthForm({
         password,
       });
       console.log("res", res);
-      redirect(from)
+      redirect(from);
     } else {
       const data = await api.post("/auth/register", {
         name,
@@ -56,21 +57,23 @@ export function UserAuthForm({
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
-          { !login && <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="name">
-              Name
-            </Label>
-            <Input
-              id="name"
-              placeholder="Full Name"
-              type="text"
-              autoCapitalize="none"
-              autoCorrect="off"
-              disabled={isLoading}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>}
+          {!login && (
+            <div className="grid gap-1">
+              <Label className="sr-only" htmlFor="name">
+                Name
+              </Label>
+              <Input
+                id="name"
+                placeholder="Full Name"
+                type="text"
+                autoCapitalize="none"
+                autoCorrect="off"
+                disabled={isLoading}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+          )}
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
               Email
@@ -144,12 +147,14 @@ export function UserAuthForm({
           disabled={isLoading}
           className="flex-1"
         >
-          {isLoading ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Icons.gitHub className="mr-2 h-4 w-4" />
-          )}{" "}
-          Github
+          <a className="flex items-center" href={getGitHubUrl(from)}>
+            {isLoading ? (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Icons.gitHub className="mr-2 h-4 w-4" />
+            )}{" "}
+            Github
+          </a>
         </Button>
         <Button
           asChild

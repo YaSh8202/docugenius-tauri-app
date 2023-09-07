@@ -10,9 +10,11 @@ const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET as string;
 
 const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
-export const uploadToCloudinary = async (file: File) => {
+export const uploadToCloudinary = async (file: File, title: string) => {
   const formData = new FormData();
-  formData.append("file", file);
+  const newFile = new File([file], title, { type: file.type });
+  
+  formData.append("file", newFile);
   formData.append("upload_preset", uploadPreset);
   const res = await fetch(url, {
     method: "POST",
@@ -20,5 +22,6 @@ export const uploadToCloudinary = async (file: File) => {
   });
   const data = await res.json();
   console.log("data file", data);
-  return data.secure_url as string;
+  const secureUrl = data.secure_url as string;
+  return secureUrl;
 };
