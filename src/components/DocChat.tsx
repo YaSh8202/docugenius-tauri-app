@@ -7,10 +7,16 @@ import { Doc, Message } from "@/types";
 import api from "@/lib/api";
 import { Icons } from "./icons";
 import useMessageStore from "@/store/messageStore";
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from "react-markdown";
+import useChatScroll from "@/hooks/useChatScroll";
 
-
-const MessageComponent = ({ message, isUser }: { message: string; isUser: boolean }) => {
+const MessageComponent = ({
+  message,
+  isUser,
+}: {
+  message: string;
+  isUser: boolean;
+}) => {
   return (
     <div
       className={`border-b border-border flex w-full ${
@@ -18,14 +24,16 @@ const MessageComponent = ({ message, isUser }: { message: string; isUser: boolea
       } `}
     >
       <div className="flex items-start mx-auto w-full max-w-2xl py-6 gap-4">
-        <div>
+        <div className="mt-2.5" >
           {isUser ? (
             <UserIcon className="h-4 w-4 mr-1" />
           ) : (
             <DogIcon className="h-4 w-4 mr-1" />
           )}
         </div>
-        <ReactMarkdown className="flex-1 overflow-scroll scrollbar-hide ">{message}</ReactMarkdown>
+        <ReactMarkdown className="flex-1 overflow-scroll scrollbar-hide text-sm prose dark:prose-light lg:prose-lg ">
+          {message}
+        </ReactMarkdown>
       </div>
     </div>
   );
@@ -36,6 +44,7 @@ const DocChat = ({ doc }: { doc: Doc }) => {
 
   const messages = useMessageStore((state) => state.docs[doc.id]);
   const addMessage = useMessageStore((state) => state.addMessage);
+  const chatRef = useChatScroll(messages);
 
   const { mutate: sendQuesMutate, isLoading } = useMutation(
     async (ques: string) => {
@@ -59,10 +68,10 @@ const DocChat = ({ doc }: { doc: Doc }) => {
     } as Message);
     sendQuesMutate(message);
   };
-
+  console.log("messages", messages)
   return (
     <div className="w-full h-full bg-background flex flex-col ">
-      <div className="flex-1 overflow-auto scrollbar-hide ">
+      <div ref={chatRef} className="flex-1 overflow-auto scrollbar-hide ">
         {messages?.map((msg, idx) => (
           <MessageComponent
             key={idx}
@@ -100,3 +109,76 @@ const DocChat = ({ doc }: { doc: Doc }) => {
 };
 
 export default DocChat;
+
+
+/*
+To start a Svelte project, you can follow these steps:
+
+1. Install Svelte globally by running the following command:
+```
+npm install -g degit
+```
+
+2. Create a new Svelte project using the Svelte template:
+```
+npx degit sveltejs/template my-svelte-project
+```
+
+3. Change to the project directory:
+```
+cd my-svelte-project
+```
+
+4. Install the project dependencies:
+```
+npm install
+```
+
+5. Start the development server:
+```
+npm run dev
+```
+
+Now you have a basic Svelte project up and running!
+
+To use Tailwind CSS with Svelte, follow these additional steps:
+
+1. Install Tailwind CSS and its dependencies:
+```
+npm install tailwindcss postcss autoprefixer
+```
+
+2. Create a `tailwind.config.js` file in the project root:
+```javascript
+module.exports = {
+  purge: [],
+  theme: {
+    extend: {},
+  },
+  variants: {},
+  plugins: [],
+}
+```
+
+3. Create a `postcss.config.js` file in the project root:
+```javascript
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+```
+
+4. Import Tailwind CSS in your `App.svelte` file:
+```html
+<script>
+  import 'tailwindcss/tailwind.css';
+</script>
+```
+
+Now you can use Tailwind CSS classes in your Svelte components!
+
+Please note that these instructions assume you have Node.js and npm installed on your system.
+
+*/

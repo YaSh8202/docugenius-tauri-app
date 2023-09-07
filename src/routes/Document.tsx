@@ -2,7 +2,7 @@ import DocChat from "@/components/DocChat";
 import { Doc } from "@/types";
 import { useEffect, useRef } from "react";
 import { useLoaderData } from "react-router-dom";
-import SplitPane from "react-split-pane";
+import SplitPane from "react-split-pane-next";
 
 // export const loader = async({params})=>{
 
@@ -29,7 +29,7 @@ export default function DocPage() {
           window.localStorage.getItem("splitPos") || "400",
           10
         )}
-        onChange={(size) => localStorage.setItem("splitPos", size.toString())}
+        onChange={(size: any) => localStorage.setItem("splitPos", size.toString())}
       >
         <div className="bg-gray-700 overflow-hidden h-[calc(100vh-68px)] ">
           <iframe
