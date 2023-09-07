@@ -31,7 +31,7 @@ const MessageComponent = ({
             <DogIcon className="h-4 w-4 mr-1" />
           )}
         </div>
-        <ReactMarkdown className="flex-1 overflow-scroll scrollbar-hide text-sm prose dark:prose-light lg:prose-lg ">
+        <ReactMarkdown className="flex-1 overflow-scroll scrollbar-hide text-sm prose dark:prose-light 2xl:prose-lg ">
           {message}
         </ReactMarkdown>
       </div>

@@ -24,14 +24,14 @@ export default function DocPage() {
     <main className=" flex-1 h-[calc(100vh-68px)] overflow-hidden ">
       <SplitPane
         split="vertical"
-        minSize={50}
+        minSize={400}
         defaultSize={parseInt(
           window.localStorage.getItem("splitPos") || "400",
           10
         )}
         onChange={(size: any) => localStorage.setItem("splitPos", size.toString())}
       >
-        <div className="bg-gray-700 overflow-hidden h-[calc(100vh-68px)] ">
+        <div className="overflow-hidden h-[calc(100vh-68px)] pr-2 ">
           <iframe
             id="pdf-js-viewer"
             src={doc.url}

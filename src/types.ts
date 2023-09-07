@@ -11,7 +11,9 @@ export type Doc = {
   id: string;
   title: string;
   url: string;
-  size: number
+  size: number;
+  created_at: string;
+  updated_at: string;
 };
 
 export type Message = {
