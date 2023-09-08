@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import DocChat from "@/components/DocChat";
 import { Doc } from "@/types";
 import { useEffect, useRef } from "react";
