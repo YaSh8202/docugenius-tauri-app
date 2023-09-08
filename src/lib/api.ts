@@ -2,11 +2,12 @@ import { User } from "@/types";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: "https://docugenius-backend-production.up.railway.app/api",
   headers: {
     "Content-Type": "application/json",
   },
   withCredentials: true,
+  
 });
 
 export const refreshToken = async () => {
