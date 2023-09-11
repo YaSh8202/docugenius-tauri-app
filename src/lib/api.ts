@@ -1,13 +1,13 @@
+import useAuthStore from "@/store/authStore";
 import { User } from "@/types";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://docugenius-backend-production.up.railway.app/api",
+  baseURL: "https://docugenius-api.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${useAuthStore.getState().accessToken}`,
   },
-  withCredentials: true,
-  
 });
 
 export const refreshToken = async () => {
@@ -22,32 +22,16 @@ export const refreshToken = async () => {
   }
 };
 
-api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async function (error) {
-    const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        await refreshToken();
-      } catch (e) {
-        return Promise.reject(e);
-      }
-
-      return api(originalRequest);
-    }
-    return Promise.reject(error);
-  }
-);
 
 export default api;
 
 export const getLoggedInUser = async () => {
   try {
-    const res = await api.get("/users/me");
+    const res = await api.get("/users/me", {
+      headers: {
+        Authorization: `Bearer ${useAuthStore.getState().accessToken}`,
+      },
+    });
     return res.data.data.user as User;
   } catch (e) {
     console.log("error", e);

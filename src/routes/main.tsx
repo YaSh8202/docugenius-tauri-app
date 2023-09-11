@@ -3,14 +3,18 @@ import api from "@/lib/api";
 import { Doc } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
-
 const DocumentsPage = () => {
 
-  const { data } = useQuery(["docs"], async () => {
-    const res = await api.get("/docs");
-    return res.data.status === "success" ? (res.data.data.docs as Doc[]) : null;
-  });
-
+  const { data } = useQuery(
+    ["docs"],
+    async () => {
+      const res = await api.get("/docs");
+      return res.data.status === "success"
+        ? (res.data.data.docs as Doc[])
+        : null;
+    },
+    {}
+  );
 
   return (
     <div className="w-full py-6 ">
