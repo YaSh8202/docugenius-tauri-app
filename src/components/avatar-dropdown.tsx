@@ -12,14 +12,20 @@ import { User } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { Icons } from "./icons";
+import useAuthStore from "@/store/authStore";
+import { useNavigate } from "react-router-dom";
 
 export function AvatarDropdownMenu({ user }: { user: User }) {
   const { mutate: logoutMutate, isLoading } = useMutation(async () => {
     await api.get("/auth/logout");
   });
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
 
   const logoutHandler = () => {
     logoutMutate();
+    logout();
+    navigate(0);
   };
 
   return (

@@ -5,10 +5,11 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { redirect, useLocation } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { getGoogleUrl } from "@/lib/getGoogleUrl";
 import api from "@/lib/api";
 import { getGitHubUrl } from "@/lib/getGithubUrl";
+import useAuthStore from "@/store/authStore";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   login: boolean;
@@ -24,11 +25,13 @@ export function UserAuthForm({
   const [password, setPassword] = React.useState<string>("");
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
   const [name, setName] = React.useState<string>("");
+  const navigate = useNavigate();
 
   // const navigate = useNavigate();
   const location = useLocation();
 
   const from = ((location.state as any)?.from?.pathname as string) || "/";
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -40,7 +43,16 @@ export function UserAuthForm({
         password,
       });
       console.log("res", res);
-      redirect(from);
+
+      if (res.data?.status === "success") {
+        const accessToken = res.data?.access_token as string;
+        console.log("accessToken", accessToken);
+
+        setAccessToken(accessToken);
+        navigate(0);
+      }
+
+      // redirect(from);
     } else {
       const data = await api.post("/auth/register", {
         name,
