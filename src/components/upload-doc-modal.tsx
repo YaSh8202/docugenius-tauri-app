@@ -18,6 +18,7 @@ import { Input } from "./ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { createNewDoc } from "@/lib/api";
 import { queryClient } from "@/main";
+import { useNavigate } from "react-router-dom";
 
 const baseStyle = {
   flex: 1,
@@ -48,6 +49,9 @@ const rejectStyle = {
 };
 
 export function UploadDocModal() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+
   const {
     getRootProps,
     getInputProps,
@@ -59,14 +63,15 @@ export function UploadDocModal() {
     accept: { "application/pdf": [".pdf"] },
     maxFiles: 1,
     maxSize: 10000000, // 10MB
+    disabled: isLoading,
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
   const newDocMutation = useMutation(createNewDoc, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries(["docs"]);
+      navigate(`/docs/${data.id}`);
     },
   });
 
@@ -131,9 +136,13 @@ export function UploadDocModal() {
           <div className="my-2">
             <div
               className="h-32 grid place-content-center"
-              {...getRootProps({ style })}
+              {...getRootProps({ style, })}
             >
-              <input accept="image/*" {...getInputProps()} />
+              <input
+                disabled={isLoading}
+                accept="image/*"
+                {...getInputProps()}
+              />
               {!acceptedFiles.length ? (
                 <>
                   <p>Drag 'n' drop a doc here, or click to select a doc</p>

@@ -10,6 +10,12 @@ const api = axios.create({
   },
 });
 
+export function updateHeaders(token?: string) {
+  api.defaults.headers["Authorization"] = `Bearer ${
+    token ?? useAuthStore.getState().accessToken
+  }`;
+}
+
 export const refreshToken = async () => {
   try {
     const res = await api.get("/auth/refresh");
@@ -21,7 +27,6 @@ export const refreshToken = async () => {
     console.log("error", e);
   }
 };
-
 
 export default api;
 
@@ -78,4 +83,60 @@ export const sendQuestion = async ({
   } catch (e) {
     console.log("error", e);
   }
+};
+
+export const loginCall = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  try {
+    const res = await api.post("/auth/login", {
+      email,
+      password,
+    });
+
+    if (res.status != 200) {
+      throw new Error("Invalid credentials");
+    }
+    console.log(res.data);
+
+    const token = res.data.access_token as string;
+
+    updateHeaders(token);
+
+    return token;
+  } catch (e) {
+    console.log("error", e);
+    throw new Error("Invalid credentials");
+  }
+};
+
+export const registerCall = async ({
+  name,
+  email,
+  password,
+  passwordConfirm,
+}: {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+}) => {
+  const data = await api.post("/auth/register", {
+    name,
+    passwordConfirm,
+    email,
+    password,
+  });
+
+  if (data.status != 201) {
+    throw new Error("Invalid credentials");
+  }
+
+  const token = await loginCall({ email, password });
+
+  return token;
 };

@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import useAuthStore from "@/store/authStore";
 import { getLoggedInUser } from "@/lib/api";
 import { Icons } from "./icons";
+import { useQuery } from "@tanstack/react-query";
 
 type IAuthMiddleware = {
   children: React.ReactElement;
@@ -9,19 +10,17 @@ type IAuthMiddleware = {
 
 const AuthMiddleware: React.FC<IAuthMiddleware> = ({ children }) => {
   const setUser = useAuthStore((state) => state.setUser);
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const accessToken = useAuthStore((state) => state.accessToken);
 
-  useEffect(() => {
-    setIsLoading(true);
-    getLoggedInUser()
-      .then((user) => {
-        console.log("user", user);
-        setUser(user);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+  const { isLoading } = useQuery(
+    ["user", accessToken],
+    getLoggedInUser,
+    {
+      onSuccess: (data) => {
+        setUser(data);
+      },
+    }
+  );
 
   if (isLoading) {
     return (

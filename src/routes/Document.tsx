@@ -2,6 +2,7 @@
 
 import DocChat from "@/components/DocChat";
 import { Doc } from "@/types";
+import { Loader } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useLoaderData } from "react-router-dom";
 import SplitPane from "react-split-pane-next";
@@ -11,7 +12,7 @@ import SplitPane from "react-split-pane-next";
 // }
 
 export default function DocPage() {
-  const { doc } = useLoaderData() as {doc: Doc};
+  const { doc } = useLoaderData() as { doc: Doc };
   const pdfRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -22,6 +23,8 @@ export default function DocPage() {
 
   console.log(doc);
 
+  if (!doc) return <Loader className="animate-spin h-10 w-10 text-gray-500" />;
+
   return (
     <main className=" flex-1 h-[calc(100vh-68px)] overflow-hidden ">
       <SplitPane
@@ -31,7 +34,9 @@ export default function DocPage() {
           window.localStorage.getItem("splitPos") || "400",
           10
         )}
-        onChange={(size: any) => localStorage.setItem("splitPos", size.toString())}
+        onChange={(size: any) =>
+          localStorage.setItem("splitPos", size.toString())
+        }
       >
         <div className="overflow-hidden h-[calc(100vh-68px)] pr-2 ">
           <iframe

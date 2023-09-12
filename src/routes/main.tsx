@@ -1,17 +1,21 @@
 import { DocsTable } from "@/components/docs-table";
 import api from "@/lib/api";
+import useAuthStore from "@/store/authStore";
 import { Doc } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 const DocumentsPage = () => {
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   const { data } = useQuery(
-    ["docs"],
+    ["docs", accessToken],
     async () => {
-      const res = await api.get("/docs");
-      return res.data.status === "success"
-        ? (res.data.data.docs as Doc[])
-        : null;
+      const res = await api.get("/docs", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return res.data.status === "success" ? (res.data.data.docs as Doc[]) : [];
     },
     {}
   );
