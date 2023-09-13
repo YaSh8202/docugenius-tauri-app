@@ -23,9 +23,9 @@
       "targets": "all",
       "identifier": "com.pdf.ai",
       "icon": [
-        "icons/docugenius-32X32.png",
-        "icons/docugenius-128X128.png",
-        "icons/128x128@2x.png",
+        "32X32.png",
+        "128X128.png",
+        "256x256.png",
         "icons/icon.icns",
         "icons/icon.ico"
       ]

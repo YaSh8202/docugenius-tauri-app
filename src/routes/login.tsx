@@ -4,6 +4,8 @@ import { UserAuthForm } from "@/components/user-auth-form";
 import loginImage from "@/assets/login-image2.jpg";
 import { useEffect, useState } from "react";
 import useAuthStore from "@/store/authStore";
+import logoDark from "@/assets/logo-dark.png";
+import logoLight from "@/assets/logo-light.png";
 
 // const loggedIn = false;
 
@@ -39,20 +41,10 @@ export default function AuthenticationPage() {
           {showLogin ? "Sign Up" : "Login"}
         </Button>
         <div
-          className={
-            "absolute block lg:hidden left-4 top-2 md:left-4 md:top-4"
-          }
+          className={"absolute block lg:hidden left-4 top-2 md:left-4 md:top-4"}
         >
-          <img
-            src="/src/assets/logo-dark.png"
-            alt=""
-            className="h-16 w-16 hidden dark:block"
-          />
-          <img
-            src="/src/assets/logo-light.png"
-            alt=""
-            className="h-16 w-16 block dark:hidden"
-          />
+          <img src={logoDark} alt="" className="h-16 w-16 hidden dark:block" />
+          <img src={logoLight} alt="" className="h-16 w-16 block dark:hidden" />
         </div>
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
           <div
@@ -73,7 +65,7 @@ export default function AuthenticationPage() {
             /> */}
           </div>
           <div className="relative z-20 flex flex-col items-center text-lg font-medium justify-center h-[60vh] ">
-            <img src="/src/assets/logo-dark.png" alt="" className="h-48 w-48" />
+            <img src={logoDark} alt="" className="h-48 w-48" />
             <p className="text-4xl font-bold">DocuGenius</p>
           </div>
           <div className="relative z-20 mt-auto">
