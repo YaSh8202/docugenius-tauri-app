@@ -1,7 +1,7 @@
 [package]
-name = "tauri-react-app"
+name = "docugenius"
 version = "0.0.0"
-description = "A Tauri App"
+description = "Your PDF Questions, Instant Answers!"
 authors = ["you"]
 license = ""
 repository = ""

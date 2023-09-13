@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "tauri-react-app",
+    "productName": "DocuGenius",
     "version": "0.0.0"
   },
   "tauri": {
@@ -23,8 +23,8 @@
       "targets": "all",
       "identifier": "com.pdf.ai",
       "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
+        "icons/docugenius-32X32.png",
+        "icons/docugenius-128X128.png",
         "icons/128x128@2x.png",
         "icons/icon.icns",
         "icons/icon.ico"
@@ -37,7 +37,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "tauri-react-app",
+        "title": "DocuGenius",
         "width": 800,
         "height": 600,
         "minWidth": 500

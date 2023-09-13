@@ -5,7 +5,6 @@ import loginImage from "@/assets/login-image2.jpg";
 import { useEffect, useState } from "react";
 import useAuthStore from "@/store/authStore";
 
-
 // const loggedIn = false;
 
 // export const loader = () => {
@@ -39,6 +38,22 @@ export default function AuthenticationPage() {
         >
           {showLogin ? "Sign Up" : "Login"}
         </Button>
+        <div
+          className={
+            "absolute block lg:hidden left-4 top-2 md:left-4 md:top-4"
+          }
+        >
+          <img
+            src="/src/assets/logo-dark.png"
+            alt=""
+            className="h-16 w-16 hidden dark:block"
+          />
+          <img
+            src="/src/assets/logo-light.png"
+            alt=""
+            className="h-16 w-16 block dark:hidden"
+          />
+        </div>
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
           <div
             style={{
@@ -58,8 +73,8 @@ export default function AuthenticationPage() {
             /> */}
           </div>
           <div className="relative z-20 flex flex-col items-center text-lg font-medium justify-center h-[60vh] ">
-            <img src='/src/assets/logo-dark.png' alt="" className="h-48 w-48" />
-            <p className="text-4xl font-bold" >DocuGenius</p>
+            <img src="/src/assets/logo-dark.png" alt="" className="h-48 w-48" />
+            <p className="text-4xl font-bold">DocuGenius</p>
           </div>
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
