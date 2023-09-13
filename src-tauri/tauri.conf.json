@@ -23,9 +23,9 @@
       "targets": "all",
       "identifier": "com.pdf.ai",
       "icon": [
-        "32X32.png",
-        "128X128.png",
-        "256x256.png",
+        "icons/32X32.png",
+        "icons/128X128.png",
+        "icons/256x256.png",
         "icons/icon.icns",
         "icons/icon.ico"
       ]
