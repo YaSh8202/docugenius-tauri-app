@@ -1,6 +1,6 @@
 [package]
 name = "docugenius"
-version = "0.0.0"
+version = "0.0.1"
 description = "Your PDF Questions, Instant Answers!"
 authors = ["you"]
 license = ""
