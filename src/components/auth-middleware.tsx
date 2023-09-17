@@ -3,6 +3,8 @@ import useAuthStore from "@/store/authStore";
 import { getLoggedInUser } from "@/lib/api";
 import { Icons } from "./icons";
 import { useQuery } from "@tanstack/react-query";
+import logoDark from "@/assets/logo-dark.png";
+import logoLight from "@/assets/logo-light.png";
 
 type IAuthMiddleware = {
   children: React.ReactElement;
@@ -23,12 +25,12 @@ const AuthMiddleware: React.FC<IAuthMiddleware> = ({ children }) => {
       <div className="h-screen w-screen grid place-content-center ">
         <div className="flex flex-col items-center gap-5">
           <img
-            src="/src/assets/logo-dark.png"
+            src={logoDark}
             alt=""
             className="h-48 w-48 hidden dark:block"
           />
           <img 
-            src="/src/assets/logo-light.png"
+            src={logoLight}
             alt=""
             className="h-48 w-48 block dark:hidden"
           />
