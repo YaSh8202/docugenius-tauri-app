@@ -6,6 +6,14 @@ Overview
 
 DocuGenius is a cutting-edge desktop application that enables users to upload any type of document and ask questions related to its contents. The app uses the powerful Pinecone vector database and OpenAI API to provide accurate and relevant answers. With its innovative embedding and vector search technology, DocuGenius is capable of delivering lightning-fast responses to user queries.
 
+Screenshots
+-----------
+
+![DocuGenius Screenshot](public/login.png)
+![DocuGenius Screenshot](public/docugenius.png)
+
+
+
 Features
 --------
 
