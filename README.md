@@ -59,7 +59,7 @@ Many thanks to the following projects and organizations for their contributions 
 * ChatGPT-retrieval-plugin (<https://github.com/openai/chatgpt-retrieval-plugin>)
 * Tauri (<https://tauri.app/>)
 * ReactJS (<https://reactjs.org/>)
-* Tailwind CSS (<https://tailwindcss.com/>)
+* Tailwind CSS
 * Shadcn/UI (<https://ui.shadcn.com/>)
 * ExpressJS (<https://expressjs.com/>)
 * MongoDB (<https://www.mongodb.com/>)
