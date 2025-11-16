@@ -2,7 +2,10 @@ import { User } from "@/types";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://docugenius-api.onrender.com/api",
+  // baseURL: "https://docugenius-api.onrender.com/api",
+  baseURL: import.meta.env.DEV
+    ? "http://localhost:4000/api"
+    : "https://docugenius-api.vercel.app/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -94,7 +97,6 @@ export const sendQuestion = async ({
     console.log("error", e);
   }
 };
-
 
 export const loginCall = async ({
   email,
