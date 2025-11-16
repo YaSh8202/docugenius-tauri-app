@@ -9,7 +9,12 @@ export default defineConfig(async () => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "inline-style-prefixer/static": path.resolve(__dirname, "./node_modules/inline-style-prefixer/static/index.js"),
     },
+  },
+
+  optimizeDeps: {
+    include: ['inline-style-prefixer'],
   },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
