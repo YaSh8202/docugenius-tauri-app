@@ -9,7 +9,6 @@ import { useLocation } from "react-router-dom";
 import { getGoogleUrl } from "@/lib/getGoogleUrl";
 import { loginCall, registerCall } from "@/lib/api";
 import { getGitHubUrl } from "@/lib/getGithubUrl";
-import useAuthStore from "@/store/authStore";
 import * as z from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,13 +37,9 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
   const { isLoading, error, mutateAsync } = useMutation(loginCall);
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-    const token = await mutateAsync(data);
-    console.log("token", token);
-
-    setAccessToken(token);
+    await mutateAsync(data);
   };
 
   return (
@@ -94,7 +89,6 @@ const LoginForm = () => {
 };
 
 const RegisterForm = () => {
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const {
     register,
     handleSubmit,
@@ -109,13 +103,12 @@ const RegisterForm = () => {
   } = useMutation(registerCall);
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
-    const token = await mutateAsync({
+    await mutateAsync({
       name: data.name,
       email: data.email,
       password: data.password,
       passwordConfirm: data.confirmPassword,
     });
-    setAccessToken(token);
   };
 
   return (
@@ -217,7 +210,7 @@ export function UserAuthForm({
   login,
   ...props
 }: UserAuthFormProps) {
-  const [isLoading, ] = React.useState(false);
+  const [isLoading] = React.useState(false);
   // const navigate = useNavigate();
   const location = useLocation();
 

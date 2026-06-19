@@ -1,20 +1,16 @@
-import useAuthStore from "@/store/authStore";
 import { User } from "@/types";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://docugenius-api.onrender.com/api",
+  // baseURL: "https://docugenius-api.onrender.com/api",
+  baseURL: import.meta.env.DEV
+    ? "http://localhost:4000/api"
+    : "https://docugenius-api.vercel.app/api",
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${useAuthStore.getState().accessToken}`,
   },
+  withCredentials: true,
 });
-
-export function updateHeaders(token?: string) {
-  api.defaults.headers["Authorization"] = `Bearer ${
-    token ?? useAuthStore.getState().accessToken
-  }`;
-}
 
 export const refreshToken = async () => {
   try {
@@ -28,15 +24,32 @@ export const refreshToken = async () => {
   }
 };
 
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async function (error) {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        await refreshToken();
+      } catch (e) {
+        return Promise.reject(e);
+      }
+
+      return api(originalRequest);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;
 
 export const getLoggedInUser = async () => {
   try {
-    const res = await api.get("/users/me", {
-      headers: {
-        Authorization: `Bearer ${useAuthStore.getState().accessToken}`,
-      },
-    });
+    const res = await api.get("/users/me");
     return res.data.data.user as User;
   } catch (e) {
     console.log("error", e);
@@ -104,8 +117,6 @@ export const loginCall = async ({
     console.log(res.data);
 
     const token = res.data.access_token as string;
-
-    updateHeaders(token);
 
     return token;
   } catch (e) {
